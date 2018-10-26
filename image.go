@@ -257,3 +257,13 @@ func checkImage(im *C.Image, parent *Image, ex *C.ExceptionInfo, what string) (*
 	}
 	return nil, exError(ex, what)
 }
+
+// Strip removes all profiles and text attributes from the image.
+func (im *Image) Strip() bool {
+	success := int(C.StripImage(im.image))
+	return success > 0
+}
+
+func (im *Image) DescribeImage() {
+	C.DescribeImage(im.image, (*C.FILE)(C.stdout), C.uint(1))
+}

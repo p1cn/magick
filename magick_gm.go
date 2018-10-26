@@ -33,6 +33,10 @@ func magickSize(v uint) C.ulong {
 	return C.ulong(v)
 }
 
+func magicUlong(v uint64) C.ulong {
+	return C.ulong(v)
+}
+
 func magickUint(v uint) C.uint {
 	return C.uint(v)
 }

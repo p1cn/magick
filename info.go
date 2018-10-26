@@ -35,14 +35,14 @@ func (in *Info) SetFormat(format string) {
 
 // Quality returns the quality used when compressing the image.
 // This parameter does not affect all formats.
-func (in *Info) Quality() uint {
-	return uint(in.info.quality)
+func (in *Info) Quality() uint64 {
+	return uint64(in.info.quality)
 }
 
 // SetQuality sets the quality used when compressing the image.
 // This parameter does not affect all formats.
-func (in *Info) SetQuality(q uint) {
-	in.info.quality = magickSize(q)
+func (in *Info) SetQuality(q uint64) {
+	in.info.quality = magicUlong(q)
 }
 
 // Colorspace returns the colorspace used when encoding the image.
@@ -71,4 +71,22 @@ func NewInfo() *Info {
 		}
 	})
 	return info
+}
+
+//MagickPassFail AddDefinitions( ImageInfo *image_info, const char *options );
+//The format of the string is "key1[=[value1]],key2[=[value2]],...".
+func (in *Info) AddDefinitions(def string) error {
+	d := C.CString(def)
+	defer C.free(unsafe.Pointer(d))
+
+	var ex C.ExceptionInfo
+	C.GetExceptionInfo(&ex)
+	defer C.DestroyExceptionInfo(&ex)
+
+	result := int(C.AddDefinitions(in.info, d, &ex))
+	if result <= 0 {
+		return exError(&ex, "AddDefinitions")
+	}
+
+	return nil
 }
