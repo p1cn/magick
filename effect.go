@@ -30,3 +30,11 @@ func (im *Image) Convolve(order int, kernel []float64) (*Image, error) {
 	defer freeDoublePtr(data.kernel)
 	return im.applyDataFunc("convolving", C.ImageDataFunc(C.convolveImage), &data)
 }
+
+// GaussianBlur Image
+func (im *Image) GaussianBlur(radius, sigma float64) (*Image, error) {
+	var data C.GaussianBlurData
+	data.radius = C.double(radius)
+	data.sigma = C.double(sigma)
+	return im.applyDataFunc("gaussianblur", C.ImageDataFunc(C.gaussianBlurImage), &data)
+}

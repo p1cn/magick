@@ -8,6 +8,13 @@ typedef struct {
     double *kernel;
 } ConvolveData;
 
+typedef struct {
+    double radius;
+    double sigma;
+} GaussianBlurData;
+
 Image * convolveImage(Image *image, void *data, ExceptionInfo *ex);
+
+Image * gaussianBlurImage(Image *image, void *data, ExceptionInfo *ex);
 
 #endif
